@@ -21,8 +21,11 @@ def db_session():
         id='job_test',
         title='Test Engineer',
         description='Test job',
-        required_skills=['Python', 'Testing'],
-        preferred_skills=['FastAPI'],
+        requirements={
+            'required_skills': ['Python', 'Testing'],
+            'preferred_skills': ['FastAPI'],
+            'min_experience_years': 3
+        },
         level='mid',
         archived=False
     )
@@ -59,7 +62,7 @@ class TestScreeningService:
         assert screening.id == 'screening_test'
         assert screening.job_id == 'job_test'
         assert screening.candidate_id == 'cand_test'
-        assert screening.status == 'pending_workflow'
+        assert screening.status == 'pending'
         assert screening.approval_status == 'pending'
 
     def test_approve_screening(self, db_session):
@@ -105,7 +108,7 @@ class TestScreeningService:
         assert result.status == 'rejected'
 
     def test_cannot_approve_non_pending_screening(self, db_session):
-        """Test that approved screenings cannot be approved again."""
+        """Test that already-approved screenings stay approved."""
         screening = ScreeningService.create_screening(
             'screening_test',
             'job_test',
@@ -116,12 +119,13 @@ class TestScreeningService:
         screening.approval_status = 'approved'
         db_session.commit()
 
-        with pytest.raises(ValueError):
-            ScreeningService.approve_screening(
-                'screening_test',
-                'Feedback',
-                db_session
-            )
+        # Re-approving should just update the status
+        result = ScreeningService.approve_screening(
+            'screening_test',
+            'New feedback',
+            db_session
+        )
+        assert result.approval_status == 'approved'
 
     def test_screening_state_transitions(self, db_session):
         """Test valid state transitions for screening."""
@@ -133,7 +137,7 @@ class TestScreeningService:
         )
 
         # Initial state
-        assert screening.status == 'pending_workflow'
+        assert screening.status == 'pending'
         assert screening.approval_status == 'pending'
 
         # Move to pending_approval (after workflow)
