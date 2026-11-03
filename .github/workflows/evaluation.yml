@@ -1,0 +1,87 @@
+name: AI Evaluation
+
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 2 * * *'  # Daily at 2 AM UTC
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run evaluation harness
+      run: |
+        python eval/run_eval.py --output eval/results.json --verbose
+
+    - name: Check evaluation results
+      run: |
+        python -c "
+        import json
+        with open('eval/results.json') as f:
+            results = json.load(f)
+
+        pass_rate_str = results['pass_rate'].rstrip('%')
+        pass_rate = float(pass_rate_str)
+        avg_score = results['average_score'].rstrip('%')
+
+        print(f'Evaluation Results:')
+        print(f'  Pass Rate: {results[\"pass_rate\"]}')
+        print(f'  Average Score: {results[\"average_score\"]}')
+        print(f'  Tests Passed: {results[\"passed_tests\"]}/{results[\"total_tests\"]}')
+        print()
+
+        if pass_rate < 80:
+            print('❌ Evaluation failed: Pass rate below 80%')
+            exit(1)
+        else:
+            print('✅ Evaluation passed!')
+            exit(0)
+        "
+
+    - name: Upload evaluation results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: evaluation-results
+        path: eval/results.json
+
+    - name: Comment on PR
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const results = JSON.parse(fs.readFileSync('eval/results.json', 'utf8'));
+
+          const comment = `## AI Evaluation Results
+
+          - **Pass Rate:** ${results.pass_rate}
+          - **Average Score:** ${results.average_score}
+          - **Tests Passed:** ${results.passed_tests}/${results.total_tests}
+
+          ### By Criterion
+          ${Object.entries(results.by_criterion).map(([name, scores]) =>
+            `- **${name}:** ${scores.pass_rate} (${scores.passed}/${scores.total})`
+          ).join('\n')}
+          `;
+
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });

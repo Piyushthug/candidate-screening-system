@@ -1,0 +1,62 @@
+[
+  {
+    "id": "cand_001",
+    "name": "Alice Johnson",
+    "email": "alice@example.com",
+    "resume_text": "Senior Python Engineer with 7 years of experience. Expertise in FastAPI, PostgreSQL, AWS, and Docker. Led backend team at TechCorp. Published 3 papers on scalable microservices. Mentored 5 junior developers."
+  },
+  {
+    "id": "cand_002",
+    "name": "Bob Smith",
+    "email": "bob@example.com",
+    "resume_text": "Full Stack Developer with 4 years of experience. Proficient in JavaScript, React, Node.js, and HTML/CSS. Built multiple REST APIs. Familiar with agile development practices. Currently at WebDev Inc."
+  },
+  {
+    "id": "cand_003",
+    "name": "Carol Davis",
+    "email": "carol@example.com",
+    "resume_text": "Recent graduate with 1 year experience as junior developer. Strong foundation in JavaScript, HTML, CSS. Completed bootcamp with focus on React. Contributed to open source projects. Eager to learn and grow."
+  },
+  {
+    "id": "cand_004",
+    "name": "David Lee",
+    "email": "david@example.com",
+    "resume_text": "ML Engineer with 5 years of experience. Expert in TensorFlow, PyTorch, and OpenCV. Published papers on computer vision. Worked on image recognition projects. Strong Python skills and Linux expertise."
+  },
+  {
+    "id": "cand_005",
+    "name": "Emma Wilson",
+    "email": "emma@example.com",
+    "resume_text": "DevOps Engineer with 4 years of experience. Skilled in Kubernetes, Docker, AWS, and CI/CD pipelines. Managed infrastructure at CloudCorp. Experience with Terraform and Infrastructure as Code. Strong Python scripting skills."
+  },
+  {
+    "id": "cand_006",
+    "name": "Frank Brown",
+    "email": "frank@example.com",
+    "resume_text": "Full Stack Engineer with 8 years of experience. Proficient in Python, JavaScript, React, Node.js, PostgreSQL, and AWS. Led teams of 5+. Interested in backend role. Some experience with FastAPI."
+  },
+  {
+    "id": "cand_007",
+    "name": "Grace Martin",
+    "email": "grace@example.com",
+    "resume_text": "Frontend specialist with 3 years of experience. Expert in React, JavaScript, HTML/CSS. CSS-in-JS expert. Good understanding of REST APIs. Contributed to popular React libraries. Interested in full stack work."
+  },
+  {
+    "id": "cand_008",
+    "name": "Henry Taylor",
+    "email": "henry@example.com",
+    "resume_text": "Systems Administrator transitioning to DevOps. 2 years of Linux and Docker experience. Self-taught in Kubernetes and AWS. Contributing to open source DevOps tools. Eager to formalize skills."
+  },
+  {
+    "id": "cand_009",
+    "name": "Iris Chen",
+    "email": "iris@example.com",
+    "resume_text": "Data Scientist with Python background. 3 years of experience. Familiar with machine learning basics. Some experience with TensorFlow. Strong SQL and data analysis skills. Interested in computer vision."
+  },
+  {
+    "id": "cand_010",
+    "name": "Jack Rodriguez",
+    "email": "jack@example.com",
+    "resume_text": "Senior Backend Engineer with 6 years of Python experience. Expert in Django and some FastAPI experience. PostgreSQL and Redis expert. AWS certified. Interested in microservices architecture. Great mentor."
+  }
+]

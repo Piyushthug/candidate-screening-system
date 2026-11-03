@@ -1,0 +1,37 @@
+[
+  {
+    "id": "job_001",
+    "title": "Senior Python Engineer",
+    "description": "We're looking for an experienced Python engineer to lead our backend team. You'll work on scalable microservices, mentor junior developers, and shape our technical roadmap.",
+    "requirements": ["Python", "FastAPI", "PostgreSQL", "AWS", "Docker", "5+ years experience"],
+    "level": "senior"
+  },
+  {
+    "id": "job_002",
+    "title": "Full Stack JavaScript Developer",
+    "description": "Join our team to build modern web applications. We use React on frontend and Node.js on backend. You'll work in an agile environment with a focus on quality.",
+    "requirements": ["JavaScript", "React", "Node.js", "HTML/CSS", "REST APIs", "3+ years experience"],
+    "level": "mid"
+  },
+  {
+    "id": "job_003",
+    "title": "ML Engineer - Computer Vision",
+    "description": "Build and deploy computer vision models for real-world applications. Work with cutting-edge deep learning frameworks and large-scale datasets.",
+    "requirements": ["Python", "TensorFlow", "PyTorch", "OpenCV", "Machine Learning", "4+ years experience"],
+    "level": "senior"
+  },
+  {
+    "id": "job_004",
+    "title": "Junior Frontend Developer",
+    "description": "Start your career in web development! We're looking for a junior developer to build responsive user interfaces and learn best practices.",
+    "requirements": ["JavaScript", "React", "HTML/CSS", "Git", "0-2 years experience"],
+    "level": "junior"
+  },
+  {
+    "id": "job_005",
+    "title": "DevOps Engineer",
+    "description": "Design and maintain our cloud infrastructure. Work with Kubernetes, CI/CD pipelines, and infrastructure as code.",
+    "requirements": ["Kubernetes", "Docker", "AWS", "CI/CD", "Terraform", "3+ years experience"],
+    "level": "mid"
+  }
+]
