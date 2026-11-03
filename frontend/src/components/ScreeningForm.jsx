@@ -50,7 +50,14 @@ export default function ScreeningForm({ job, candidateIds, onBack }) {
         }
       }
 
-      setScreenings(detailedScreenings)
+      // Sort by fit score (high to low)
+      const sorted = detailedScreenings.sort((a, b) => {
+        const scoreA = a.fit_score || 0
+        const scoreB = b.fit_score || 0
+        return scoreB - scoreA
+      })
+
+      setScreenings(sorted)
       setError(null)
     } catch (err) {
       setError('Failed to load screenings: ' + (err.message || 'Unknown error'))

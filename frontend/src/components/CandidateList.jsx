@@ -40,6 +40,7 @@ export default function CandidateList({
                   }}
                 />
                 <span>Name</span>
+                <span>Email</span>
                 <span>Skills</span>
                 <span>Experience</span>
               </div>
@@ -60,6 +61,7 @@ export default function CandidateList({
                       onChange={() => onToggle(candidate.id)}
                     />
                     <span className="name">{candidate.name}</span>
+                    <span className="email">{candidate.email}</span>
                     <span className="skills">
                       {primarySkills || 'Not specified'}
                     </span>

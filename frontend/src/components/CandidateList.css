@@ -9,19 +9,20 @@
 
 .table-header {
   display: grid;
-  grid-template-columns: 40px 180px 200px 120px;
-  gap: 15px;
+  grid-template-columns: 40px 150px 180px 150px 100px;
+  gap: 12px;
   background: #f7fafc;
   padding: 12px;
   border-radius: 4px;
   font-weight: 600;
   border-bottom: 2px solid #e2e8f0;
+  font-size: 13px;
 }
 
 .table-row {
   display: grid;
-  grid-template-columns: 40px 180px 200px 120px;
-  gap: 15px;
+  grid-template-columns: 40px 150px 180px 150px 100px;
+  gap: 12px;
   padding: 12px;
   border-bottom: 1px solid #e2e8f0;
   align-items: center;
