@@ -13,6 +13,17 @@ export default function ScreeningForm({ job, candidateIds, screeningIds, onBack,
     loadScreenings()
   }, [])
 
+  // Check if all screenings are complete (all have been approved or rejected)
+  useEffect(() => {
+    if (screenings.length > 0 && onComplete) {
+      const allComplete = screenings.every(s => s.approval_status !== 'pending')
+      if (allComplete) {
+        console.log('All screenings complete, showing summary')
+        onComplete(screenings)
+      }
+    }
+  }, [screenings, onComplete])
+
   const loadScreenings = async () => {
     try {
       setLoading(true)
@@ -236,25 +247,39 @@ export default function ScreeningForm({ job, candidateIds, screeningIds, onBack,
         </div>
 
         <div className="flex-between mt-20">
-          <button className="danger" onClick={handleReject} disabled={actionLoading}>
-            Reject
+          <button
+            className="danger"
+            onClick={handleReject}
+            disabled={actionLoading || screening.approval_status !== 'pending'}
+            title={screening.approval_status !== 'pending' ? 'Already ' + screening.approval_status : ''}
+          >
+            {screening.approval_status === 'rejected' ? '✓ Rejected' : 'Reject'}
           </button>
           <div className="flex">
             {currentIndex > 0 && (
-              <button className="primary" onClick={() => setCurrentIndex(currentIndex - 1)} disabled={actionLoading}>
+              <button
+                className="primary"
+                onClick={() => setCurrentIndex(currentIndex - 1)}
+                disabled={actionLoading}
+              >
                 Previous
               </button>
             )}
-            <button className="success" onClick={handleApprove} disabled={actionLoading}>
-              Approve
+            <button
+              className="success"
+              onClick={handleApprove}
+              disabled={actionLoading || screening.approval_status !== 'pending'}
+              title={screening.approval_status !== 'pending' ? 'Already ' + screening.approval_status : ''}
+            >
+              {screening.approval_status === 'approved' ? '✓ Approved' : 'Approve'}
             </button>
             {currentIndex < screenings.length - 1 && (
-              <button className="primary" onClick={nextScreening}>
+              <button className="primary" onClick={nextScreening} disabled={actionLoading}>
                 Next
               </button>
             )}
           </div>
-          <button className="primary" onClick={onBack}>
+          <button className="primary" onClick={onBack} disabled={actionLoading}>
             Exit
           </button>
         </div>

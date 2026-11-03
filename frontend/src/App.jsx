@@ -2,18 +2,16 @@ import { useState, useEffect } from 'react'
 import { screeningAPI } from './services/api'
 import JobSelector from './components/JobSelector'
 import CandidateList from './components/CandidateList'
-import ScreeningForm from './components/ScreeningForm'
 import ResultsSummary from './components/ResultsSummary'
 import './App.css'
 
 function App() {
-  const [page, setPage] = useState('jobs') // jobs, candidates, screening, results
+  const [page, setPage] = useState('jobs') // jobs, candidates, results
   const [jobs, setJobs] = useState([])
   const [candidates, setCandidates] = useState([])
   const [screenings, setScreenings] = useState([])
   const [selectedJob, setSelectedJob] = useState(null)
   const [selectedCandidates, setSelectedCandidates] = useState([])
-  const [batchScreeningIds, setBatchScreeningIds] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
@@ -72,8 +70,22 @@ function App() {
     try {
       setLoading(true)
       const { data } = await screeningAPI.createBatch(selectedJob.id, selectedCandidates)
-      setBatchScreeningIds(data.screening_ids)
-      setPage('screening')
+
+      // Load full screening details for results page
+      const screeningsList = []
+      for (const screeningId of data.screening_ids) {
+        try {
+          const { data: screeningData } = await screeningAPI.getScreeningDetail(screeningId)
+          if (screeningData?.screening) {
+            screeningsList.push(screeningData.screening)
+          }
+        } catch (e) {
+          console.warn(`Could not load screening ${screeningId}:`, e)
+        }
+      }
+
+      setScreenings(screeningsList)
+      setPage('results')
       setError(null)
     } catch (err) {
       setError('Failed to start screening: ' + (err.message || 'Unknown error'))
@@ -81,11 +93,6 @@ function App() {
     } finally {
       setLoading(false)
     }
-  }
-
-  const handleScreeningComplete = (screeningData) => {
-    setScreenings(screeningData)
-    setPage('results')
   }
 
   return (
@@ -128,16 +135,6 @@ function App() {
             onToggle={handleCandidateToggle}
             onStart={handleStartScreening}
             onBack={() => setPage('jobs')}
-          />
-        )}
-
-        {!loading && page === 'screening' && selectedJob && (
-          <ScreeningForm
-            job={selectedJob}
-            candidateIds={selectedCandidates}
-            screeningIds={batchScreeningIds}
-            onBack={() => setPage('candidates')}
-            onComplete={handleScreeningComplete}
           />
         )}
 

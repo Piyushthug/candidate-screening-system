@@ -1,11 +1,45 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { screeningAPI } from '../services/api'
+import CandidateModal from './CandidateModal'
 import './ResultsSummary.css'
 
-export default function ResultsSummary({ job, screenings, onBack }) {
+export default function ResultsSummary({ job, screenings: initialScreenings, onBack }) {
+  const [screenings, setScreenings] = useState(initialScreenings)
+  const [selectedScreening, setSelectedScreening] = useState(null)
   const [sendingEmails, setSendingEmails] = useState({})
   const [emailsSent, setEmailsSent] = useState({})
   const [error, setError] = useState(null)
+
+  // Load full screening details for all screenings
+  useEffect(() => {
+    loadAllScreenings()
+  }, [])
+
+  const loadAllScreenings = async () => {
+    try {
+      const detailedScreenings = []
+      for (const screening of initialScreenings) {
+        try {
+          if (!screening.fit_score) {
+            // Start workflow if not already run
+            await screeningAPI.startWorkflow(screening.id)
+          }
+          const { data } = await screeningAPI.getScreeningDetail(screening.id)
+          if (data?.screening) {
+            detailedScreenings.push(data.screening)
+          } else {
+            detailedScreenings.push(screening)
+          }
+        } catch (e) {
+          console.warn(`Could not load full details for screening ${screening.id}:`, e)
+          detailedScreenings.push(screening)
+        }
+      }
+      setScreenings(detailedScreenings)
+    } catch (err) {
+      console.error('Error loading screening details:', err)
+    }
+  }
 
   const approved = screenings.filter(s => s.approval_status === 'approved')
   const rejected = screenings.filter(s => s.approval_status === 'rejected')
@@ -14,6 +48,18 @@ export default function ResultsSummary({ job, screenings, onBack }) {
   const averageFitScore = approved.length > 0
     ? (approved.reduce((sum, s) => sum + (s.fit_score || 0), 0) / approved.length).toFixed(1)
     : 0
+
+  const handleModalClose = () => {
+    setSelectedScreening(null)
+  }
+
+  const handleDecision = (screeningId, decision) => {
+    // Update the screening in state
+    setScreenings(prev => prev.map(s =>
+      s.id === screeningId ? { ...s, approval_status: decision } : s
+    ))
+    setSelectedScreening(null)
+  }
 
   const handleSendEmail = async (screeningId) => {
     try {
@@ -49,10 +95,18 @@ export default function ResultsSummary({ job, screenings, onBack }) {
 
   return (
     <div className="results-summary">
+      {selectedScreening && (
+        <CandidateModal
+          screening={selectedScreening}
+          onClose={handleModalClose}
+          onDecision={handleDecision}
+        />
+      )}
+
       <div className="card">
         <div className="flex-between mb-20">
           <div>
-            <h2>Screening Results</h2>
+            <h2>Review Candidates</h2>
             <p className="text-muted">Job: <strong>{job.title}</strong></p>
           </div>
           <button className="primary" onClick={onBack}>Back to Jobs</button>
@@ -69,7 +123,7 @@ export default function ResultsSummary({ job, screenings, onBack }) {
         <div className="stats-grid">
           <div className="stat-card">
             <div className="stat-number">{screenings.length}</div>
-            <div className="stat-label">Total Screened</div>
+            <div className="stat-label">Total to Review</div>
           </div>
           <div className="stat-card success">
             <div className="stat-number">{approved.length}</div>
@@ -80,95 +134,101 @@ export default function ResultsSummary({ job, screenings, onBack }) {
             <div className="stat-label">Rejected</div>
           </div>
           <div className="stat-card warning">
-            <div className="stat-number">{averageFitScore}%</div>
-            <div className="stat-label">Avg Fit Score</div>
+            <div className="stat-number">{pending.length}</div>
+            <div className="stat-label">Pending</div>
           </div>
         </div>
 
-        {/* Approved Candidates */}
+        {/* All Candidates List - Clickable */}
+        <div className="results-section mt-30">
+          <h3>Click a candidate to review and decide</h3>
+
+          <div className="results-list">
+            {screenings.map(screening => {
+              const candidate = screening.candidate || {}
+              const status = screening.approval_status
+
+              return (
+                <div
+                  key={screening.id}
+                  className={`result-card clickable ${status}`}
+                  onClick={() => setSelectedScreening(screening)}
+                >
+                  <div className="result-header">
+                    <div>
+                      <h4>{candidate.name || 'Candidate'}</h4>
+                      <p className="text-muted">{candidate.email || 'No email'}</p>
+                    </div>
+                    <div className="result-score">
+                      <span className={`badge ${status === 'pending' ? 'neutral' : status}`}>
+                        {status === 'approved' && '✓ Approved'}
+                        {status === 'rejected' && '✗ Rejected'}
+                        {status === 'pending' && `${Math.round(screening.fit_score || 0)}%`}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="result-body">
+                    <p><strong>Skills:</strong> {candidate.parsed_skills?.slice(0, 3).join(', ') || 'Not specified'}</p>
+                    <p><strong>Experience:</strong> {candidate.experience_years || 'N/A'} years</p>
+                  </div>
+
+                  {status === 'pending' && (
+                    <div className="result-actions">
+                      <p className="text-muted small">Click to review and decide</p>
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* Send Approved Emails Section */}
         {approved.length > 0 && (
           <div className="results-section mt-30">
-            <div className="flex-between mb-15">
-              <h3>✓ Approved ({approved.length})</h3>
+            <h3>Send Approval Emails</h3>
+            <p className="text-muted">Send personalized messages to approved candidates</p>
+
+            <div className="results-list">
+              {approved.map(screening => {
+                const candidate = screening.candidate || {}
+                return (
+                  <div key={screening.id} className="result-card approved">
+                    <div className="result-header">
+                      <div>
+                        <h4>{candidate.name || 'Candidate'}</h4>
+                        <p className="text-muted">{candidate.email || 'No email'}</p>
+                      </div>
+                    </div>
+
+                    <div className="result-actions">
+                      <button
+                        className="success"
+                        onClick={() => handleSendEmail(screening.id)}
+                        disabled={sendingEmails[screening.id]}
+                      >
+                        {emailsSent[screening.id] ? '✓ Email Sent' : 'Send Email'}
+                      </button>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+
+            <div className="mt-15">
               <button
-                className="success"
+                className="success large"
                 onClick={handleSendAllEmails}
-                disabled={Object.values(sendingEmails).some(v => v)}
+                disabled={Object.values(sendingEmails).some(v => v) || approved.length === 0}
               >
-                Send All Emails
+                Send All Emails ({approved.length})
               </button>
             </div>
-
-            <div className="results-list">
-              {approved.map(screening => (
-                <div key={screening.id} className="result-card approved">
-                  <div className="result-header">
-                    <div>
-                      <h4>{screening.candidate.name}</h4>
-                      <p className="text-muted">{screening.candidate.email}</p>
-                    </div>
-                    <div className="result-score">
-                      <span className="badge success">{Math.round(screening.fit_score)}%</span>
-                    </div>
-                  </div>
-
-                  <div className="result-body">
-                    <p><strong>Skills:</strong> {screening.candidate.parsed_skills?.join(', ') || 'Not specified'}</p>
-                    <p><strong>Experience:</strong> {screening.candidate.experience_years || 'N/A'} years</p>
-                  </div>
-
-                  <div className="result-actions">
-                    <button
-                      className="success"
-                      onClick={() => handleSendEmail(screening.id)}
-                      disabled={sendingEmails[screening.id]}
-                    >
-                      {emailsSent[screening.id] ? '✓ Email Sent' : 'Send Email'}
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         )}
 
-        {/* Rejected Candidates */}
-        {rejected.length > 0 && (
-          <div className="results-section mt-30">
-            <h3>✗ Rejected ({rejected.length})</h3>
-
-            <div className="results-list">
-              {rejected.map(screening => (
-                <div key={screening.id} className="result-card rejected">
-                  <div className="result-header">
-                    <div>
-                      <h4>{screening.candidate.name}</h4>
-                      <p className="text-muted">{screening.candidate.email}</p>
-                    </div>
-                    <div className="result-score">
-                      <span className="badge danger">{Math.round(screening.fit_score || 0)}%</span>
-                    </div>
-                  </div>
-
-                  <div className="result-body">
-                    <p><strong>Skills:</strong> {screening.candidate.parsed_skills?.join(', ') || 'Not specified'}</p>
-                    <p><strong>Experience:</strong> {screening.candidate.experience_years || 'N/A'} years</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Pending */}
-        {pending.length > 0 && (
-          <div className="results-section mt-30">
-            <h3>⏳ Pending ({pending.length})</h3>
-            <p className="text-muted">These candidates still need to be reviewed.</p>
-          </div>
-        )}
-
-        {/* Export */}
+        {/* Footer */}
         <div className="results-footer mt-30">
           <button className="primary" onClick={onBack}>← Back to Jobs</button>
         </div>
