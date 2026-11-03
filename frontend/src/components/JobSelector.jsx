@@ -13,26 +13,35 @@ export default function JobSelector({ jobs, onSelectJob, onRefresh }) {
           <p className="text-center text-muted mt-20">No jobs available</p>
         ) : (
           <div className="grid-2 mt-20">
-            {jobs.map(job => (
-              <div key={job.id} className="job-card" onClick={() => onSelectJob(job)}>
-                <h3>{job.title}</h3>
-                <p className="text-sm text-muted mb-10">{job.description.substring(0, 100)}...</p>
-                <div className="flex">
-                  {job.requirements.slice(0, 3).map(req => (
-                    <span key={req} className="badge success">{req}</span>
-                  ))}
-                  {job.requirements.length > 3 && (
-                    <span className="badge warning">+{job.requirements.length - 3}</span>
-                  )}
+            {jobs.map(job => {
+              const desc = job.description || ''
+              const requirements = job.required_skills || job.requirements || []
+              const level = job.level || 'mid'
+
+              return (
+                <div key={job.id} className="job-card" onClick={() => onSelectJob(job)}>
+                  <h3>{job.title}</h3>
+                  <p className="text-sm text-muted mb-10">
+                    {desc.substring(0, 100)}
+                    {desc.length > 100 ? '...' : ''}
+                  </p>
+                  <div className="flex">
+                    {requirements.slice(0, 3).map((req, idx) => (
+                      <span key={`${req}-${idx}`} className="badge success">{req}</span>
+                    ))}
+                    {requirements.length > 3 && (
+                      <span className="badge warning">+{requirements.length - 3}</span>
+                    )}
+                  </div>
+                  <div className="flex-between mt-20">
+                    <span className={`badge ${level === 'senior' ? 'danger' : 'warning'}`}>
+                      {level}
+                    </span>
+                    <button className="primary">Select</button>
+                  </div>
                 </div>
-                <div className="flex-between mt-20">
-                  <span className={`badge ${job.level === 'senior' ? 'danger' : 'warning'}`}>
-                    {job.level}
-                  </span>
-                  <button className="primary">Select</button>
-                </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         )}
       </div>
