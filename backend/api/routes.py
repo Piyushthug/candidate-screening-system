@@ -1,6 +1,6 @@
 """API routes for screening endpoints."""
 import uuid
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Query
 from sqlalchemy.orm import Session
 from datetime import datetime
 
@@ -16,11 +16,23 @@ router = APIRouter(prefix="/screen", tags=["screening"])
 
 @router.post("/batch")
 async def start_screening_batch(
-    job_id: str,
-    candidate_ids: list[str] = None,
+    job_id: str = Query(..., description="Job ID to screen for"),
+    candidate_ids: list[str] = Query(..., description="List of candidate IDs to screen"),
     db: Session = Depends(get_db)
 ):
-    """Start screening batch for multiple candidates."""
+    """Start screening batch for multiple candidates.
+
+    Parameters:
+    - job_id: ID of the job to screen for
+    - candidate_ids: List of candidate IDs to screen (as query params: ?candidate_ids=id1&candidate_ids=id2)
+    """
+
+    # Validate inputs
+    if not job_id:
+        raise HTTPException(status_code=400, detail="job_id is required")
+
+    if not candidate_ids or len(candidate_ids) == 0:
+        raise HTTPException(status_code=400, detail="At least one candidate must be selected")
 
     # Validate job exists and is not archived
     job = db.query(Job).filter(Job.id == job_id).first()
@@ -29,9 +41,6 @@ async def start_screening_batch(
 
     if job.archived:
         raise HTTPException(status_code=400, detail="Job is archived")
-
-    if not candidate_ids or len(candidate_ids) == 0:
-        raise HTTPException(status_code=400, detail="At least one candidate must be selected")
 
     # Create screening records for each candidate
     screening_ids = []
