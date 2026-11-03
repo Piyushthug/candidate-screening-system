@@ -30,49 +30,60 @@ class TestResumeParser:
 
 class TestFitScoring:
     """Tests for fit score calculation."""
-    
+
     def test_calculate_fit(self):
         """Test calculating fit score."""
-        candidate = {
-            'skills': ['Python', 'FastAPI', 'PostgreSQL'],
-            'experience_years': 7
-        }
+        candidate_skills = ['Python', 'FastAPI', 'PostgreSQL']
+        candidate_experience_years = 7
         job_requirements = {
             'required_skills': ['Python', 'FastAPI'],
             'preferred_skills': [],
-            'min_experience': 5
+            'min_experience_years': 5
         }
-        
-        result = CandidateFitScoring.calculate_fit(candidate, job_requirements)
-        
+
+        result = CandidateFitScoring.calculate_fit(
+            candidate_skills, candidate_experience_years, job_requirements
+        )
+
         assert result is not None
-        assert 'fit_score' in result
-        assert 0 <= result['fit_score'] <= 100
+        assert 'score' in result
+        assert 0 <= result['score'] <= 100
 
 
 class TestMessageGeneration:
     """Tests for message generation."""
-    
+
     def test_generate_message(self):
         """Test generating outreach message."""
-        candidate = {'name': 'John Doe', 'skills': ['Python']}
-        job = {'title': 'Python Engineer'}
-        fit_analysis = {'fit_score': 85}
-        
-        result = OutreachMessageGeneration.generate_message(candidate, job, fit_analysis)
-        
+        candidate_name = 'John Doe'
+        job_title = 'Python Engineer'
+        fit_score = 85
+        key_matches = ['Python', 'FastAPI']
+        critical_gaps = []
+
+        result = OutreachMessageGeneration.generate_message(
+            candidate_name, job_title, fit_score, key_matches, critical_gaps
+        )
+
         assert result is not None
         assert isinstance(result, dict)
+        assert 'content' in result
+        assert 'John' in result['content']
 
 
 class TestMessageValidation:
     """Tests for message validation."""
-    
+
     def test_validate_message(self):
         """Test message validation."""
-        message = "Hello, we are interested in your profile"
-        
-        result = MessageValidation.validate_message(message, "Python Engineer", ["Python"])
-        
-        assert result is not None
-        assert isinstance(result, dict)
+        message_content = "Hi John Doe, we are interested in your profile for the Python Engineer position. Your Python skills align well with our team."
+        candidate_name = "John Doe"
+        job_title = "Python Engineer"
+        resume_text = "John Doe, 5 years Python experience with FastAPI"
+
+        is_valid, feedback = MessageValidation.validate_message(
+            message_content, candidate_name, job_title, resume_text
+        )
+
+        assert isinstance(is_valid, bool)
+        assert isinstance(feedback, str)
