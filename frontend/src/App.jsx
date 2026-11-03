@@ -77,7 +77,12 @@ function App() {
         try {
           const { data: screeningData } = await screeningAPI.getScreeningDetail(screeningId)
           if (screeningData?.screening) {
-            screeningsList.push(screeningData.screening)
+            // Merge candidate data into screening object
+            const screeningWithCandidate = {
+              ...screeningData.screening,
+              candidate: screeningData.candidate
+            }
+            screeningsList.push(screeningWithCandidate)
           }
         } catch (e) {
           console.warn(`Could not load screening ${screeningId}:`, e)

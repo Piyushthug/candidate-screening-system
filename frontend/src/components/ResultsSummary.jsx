@@ -26,7 +26,12 @@ export default function ResultsSummary({ job, screenings: initialScreenings, onB
           }
           const { data } = await screeningAPI.getScreeningDetail(screening.id)
           if (data?.screening) {
-            detailedScreenings.push(data.screening)
+            // Merge candidate data into screening object
+            const screeningWithCandidate = {
+              ...data.screening,
+              candidate: data.candidate
+            }
+            detailedScreenings.push(screeningWithCandidate)
           } else {
             detailedScreenings.push(screening)
           }
