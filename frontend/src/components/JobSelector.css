@@ -1,0 +1,28 @@
+.job-selector {
+  margin-bottom: 20px;
+}
+
+.job-card {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.job-card:hover {
+  border-color: #667eea;
+  box-shadow: 0 8px 16px rgba(102, 126, 234, 0.2);
+  transform: translateY(-4px);
+}
+
+.job-card h3 {
+  color: #1a202c;
+  margin-bottom: 10px;
+}
+
+.job-card .badge {
+  margin-right: 8px;
+  margin-bottom: 10px;
+}

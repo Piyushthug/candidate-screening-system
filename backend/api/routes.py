@@ -215,17 +215,29 @@ async def list_screenings_for_job(job_id: str, db: Session = Depends(get_db)):
 
     screenings = db.query(Screening).filter(Screening.job_id == job_id).all()
 
+    screening_data = []
+    for s in screenings:
+        candidate = db.query(Candidate).filter(Candidate.id == s.candidate_id).first()
+        screening_data.append({
+            "id": s.id,
+            "job_id": s.job_id,
+            "candidate_id": s.candidate_id,
+            "status": s.status,
+            "fit_score": s.fit_score,
+            "fit_reasoning": s.fit_reasoning or "",
+            "generated_message": s.generated_message or "",
+            "approval_status": s.approval_status,
+            "candidate": {
+                "id": candidate.id,
+                "name": candidate.name,
+                "email": candidate.email,
+                "experience_years": candidate.experience_years,
+                "parsed_skills": candidate.parsed_skills.split(",") if candidate.parsed_skills else []
+            } if candidate else None
+        })
+
     return {
         "job_id": job_id,
-        "total": len(screenings),
-        "screenings": [
-            {
-                "id": s.id,
-                "candidate_id": s.candidate_id,
-                "status": s.status,
-                "fit_score": s.fit_score,
-                "approval_status": s.approval_status
-            }
-            for s in screenings
-        ]
+        "total": len(screening_data),
+        "screenings": screening_data
     }

@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     """Application settings from environment variables."""
 
     # API Keys
-    openai_api_key: str
+    google_api_key: str
 
     # Database
     database_url: str = "sqlite:///./candidate_screening.db"

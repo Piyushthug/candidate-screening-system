@@ -1,0 +1,180 @@
+{
+  "total_tests": 20,
+  "passed_tests": 17,
+  "pass_rate": "85.0%",
+  "average_score": "97.1%",
+  "by_criterion": {
+    "task_completion": {
+      "pass_rate": "85.0%",
+      "passed": 17,
+      "total": 20
+    },
+    "groundedness": {
+      "pass_rate": "80.0%",
+      "passed": 16,
+      "total": 20
+    },
+    "relevance": {
+      "pass_rate": "75.0%",
+      "passed": 15,
+      "total": 20
+    },
+    "tool_accuracy": {
+      "pass_rate": "100.0%",
+      "passed": 20,
+      "total": 20
+    },
+    "safety": {
+      "pass_rate": "80.0%",
+      "passed": 16,
+      "total": 20
+    },
+    "failure_handling": {
+      "pass_rate": "0.0%",
+      "passed": 0,
+      "total": 20
+    }
+  },
+  "test_results": [
+    {
+      "test_id": "eval_001",
+      "test_name": "Alice - Perfect Senior Python Match",
+      "passed": true,
+      "score": "100.0%",
+      "summary": "5 pass, 0 fail"
+    },
+    {
+      "test_id": "eval_002",
+      "test_name": "Bob - Good Full Stack Match",
+      "passed": true,
+      "score": "100.0%",
+      "summary": "5 pass, 0 fail"
+    },
+    {
+      "test_id": "eval_003",
+      "test_name": "Carol - Junior React Developer",
+      "passed": true,
+      "score": "100.0%",
+      "summary": "5 pass, 0 fail"
+    },
+    {
+      "test_id": "eval_004",
+      "test_name": "David - Senior ML Engineer",
+      "passed": true,
+      "score": "100.0%",
+      "summary": "5 pass, 0 fail"
+    },
+    {
+      "test_id": "eval_005",
+      "test_name": "Emma - DevOps Match",
+      "passed": true,
+      "score": "100.0%",
+      "summary": "5 pass, 0 fail"
+    },
+    {
+      "test_id": "eval_006",
+      "test_name": "Frank - Backend Transition from Full Stack",
+      "passed": true,
+      "score": "100.0%",
+      "summary": "5 pass, 0 fail"
+    },
+    {
+      "test_id": "eval_007",
+      "test_name": "Grace - Frontend Specialization for Full Stack Role",
+      "passed": true,
+      "score": "100.0%",
+      "summary": "5 pass, 0 fail"
+    },
+    {
+      "test_id": "eval_008",
+      "test_name": "Henry - Career Transition (SysAdmin to DevOps)",
+      "passed": true,
+      "score": "100.0%",
+      "summary": "5 pass, 0 fail"
+    },
+    {
+      "test_id": "eval_009",
+      "test_name": "Iris - Data Scientist to ML Engineer (Skill Gap)",
+      "passed": true,
+      "score": "100.0%",
+      "summary": "5 pass, 0 fail"
+    },
+    {
+      "test_id": "eval_010",
+      "test_name": "Jack - Python Backend Ideal for Senior Role",
+      "passed": true,
+      "score": "100.0%",
+      "summary": "5 pass, 0 fail"
+    },
+    {
+      "test_id": "eval_011",
+      "test_name": "Stale Job Test - Archived Job Detection",
+      "passed": false,
+      "score": "82.5%",
+      "summary": "1 pass, 1 fail"
+    },
+    {
+      "test_id": "eval_012",
+      "test_name": "Malformed Resume - Fallback Handling",
+      "passed": false,
+      "score": "82.5%",
+      "summary": "4 pass, 1 fail"
+    },
+    {
+      "test_id": "eval_013",
+      "test_name": "Missing Required Skills - Honest Gap Messaging",
+      "passed": true,
+      "score": "94.0%",
+      "summary": "4 pass, 0 fail"
+    },
+    {
+      "test_id": "eval_014",
+      "test_name": "Message Validation - No Hallucinated Promises",
+      "passed": true,
+      "score": "100.0%",
+      "summary": "5 pass, 0 fail"
+    },
+    {
+      "test_id": "eval_015",
+      "test_name": "Personalization Points - Job and Resume Integration",
+      "passed": true,
+      "score": "100.0%",
+      "summary": "5 pass, 0 fail"
+    },
+    {
+      "test_id": "eval_016",
+      "test_name": "Mid-Career Switch - Honest Capability Assessment",
+      "passed": true,
+      "score": "100.0%",
+      "summary": "5 pass, 0 fail"
+    },
+    {
+      "test_id": "eval_017",
+      "test_name": "Perfect Fit with Bonus Skills",
+      "passed": true,
+      "score": "100.0%",
+      "summary": "2 pass, 0 fail"
+    },
+    {
+      "test_id": "eval_018",
+      "test_name": "Early Career - Enthusiasm Over Experience",
+      "passed": true,
+      "score": "100.0%",
+      "summary": "2 pass, 0 fail"
+    },
+    {
+      "test_id": "eval_019",
+      "test_name": "Timeout Resilience - API Failure Handling",
+      "passed": false,
+      "score": "82.5%",
+      "summary": "1 pass, 1 fail"
+    },
+    {
+      "test_id": "eval_020",
+      "test_name": "Approval Workflow - Human Decision Respected",
+      "passed": true,
+      "score": "100.0%",
+      "summary": "5 pass, 0 fail"
+    }
+  ]
+}

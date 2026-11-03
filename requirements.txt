@@ -7,7 +7,8 @@ python-dotenv==1.0.0
 
 # LLM & Agent
 langchain==0.1.0
-langchain-openai==0.0.6
+langchain-google-genai>=0.0.11
+google-generativeai>=0.3.0
 langchain-core==0.1.19
 
 # Database
