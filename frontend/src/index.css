@@ -67,6 +67,17 @@ button.danger:hover {
   background: #e53e3e;
 }
 
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+button:disabled:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
 input, select, textarea {
   font-size: 14px;
   padding: 8px 12px;

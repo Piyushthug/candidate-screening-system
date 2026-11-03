@@ -72,17 +72,24 @@ export default function ScreeningForm({ job, candidateIds, onBack }) {
 
   const handleApprove = async () => {
     const screening = screenings[currentIndex]
+    if (!screening) {
+      setError('No screening data available')
+      return
+    }
     try {
       setActionLoading(true)
-      await screeningAPI.approve(screening.id, 'Approved by recruiter')
+      console.log('Approving screening:', screening.id)
+      const result = await screeningAPI.approve(screening.id, 'Approved by recruiter')
+      console.log('Approve result:', result)
       setScreenings(prev => prev.map(s =>
         s.id === screening.id ? { ...s, approval_status: 'approved' } : s
       ))
       nextScreening()
       setError(null)
     } catch (err) {
-      setError('Failed to approve')
-      console.error(err)
+      const errMsg = err.response?.data?.detail || err.message || 'Failed to approve'
+      setError(errMsg)
+      console.error('Approve error:', err)
     } finally {
       setActionLoading(false)
     }
@@ -90,17 +97,24 @@ export default function ScreeningForm({ job, candidateIds, onBack }) {
 
   const handleReject = async () => {
     const screening = screenings[currentIndex]
+    if (!screening) {
+      setError('No screening data available')
+      return
+    }
     try {
       setActionLoading(true)
-      await screeningAPI.reject(screening.id, 'Rejected by recruiter')
+      console.log('Rejecting screening:', screening.id)
+      const result = await screeningAPI.reject(screening.id, 'Rejected by recruiter')
+      console.log('Reject result:', result)
       setScreenings(prev => prev.map(s =>
         s.id === screening.id ? { ...s, approval_status: 'rejected' } : s
       ))
       nextScreening()
       setError(null)
     } catch (err) {
-      setError('Failed to reject')
-      console.error(err)
+      const errMsg = err.response?.data?.detail || err.message || 'Failed to reject'
+      setError(errMsg)
+      console.error('Reject error:', err)
     } finally {
       setActionLoading(false)
     }
@@ -109,6 +123,9 @@ export default function ScreeningForm({ job, candidateIds, onBack }) {
   const nextScreening = () => {
     if (currentIndex < screenings.length - 1) {
       setCurrentIndex(currentIndex + 1)
+    } else {
+      // No more screenings, show completion
+      setError('All candidates have been reviewed! Click Exit to go back.')
     }
   }
 
