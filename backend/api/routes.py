@@ -218,6 +218,15 @@ async def list_screenings_for_job(job_id: str, db: Session = Depends(get_db)):
     screening_data = []
     for s in screenings:
         candidate = db.query(Candidate).filter(Candidate.id == s.candidate_id).first()
+
+        # Handle parsed_skills - it's stored as JSON list
+        skills = []
+        if candidate and candidate.parsed_skills:
+            if isinstance(candidate.parsed_skills, list):
+                skills = candidate.parsed_skills
+            elif isinstance(candidate.parsed_skills, str):
+                skills = [s.strip() for s in candidate.parsed_skills.split(",") if s.strip()]
+
         screening_data.append({
             "id": s.id,
             "job_id": s.job_id,
@@ -232,7 +241,7 @@ async def list_screenings_for_job(job_id: str, db: Session = Depends(get_db)):
                 "name": candidate.name,
                 "email": candidate.email,
                 "experience_years": candidate.experience_years,
-                "parsed_skills": candidate.parsed_skills.split(",") if candidate.parsed_skills else []
+                "parsed_skills": skills
             } if candidate else None
         })
 
