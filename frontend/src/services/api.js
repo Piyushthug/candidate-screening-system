@@ -49,7 +49,10 @@ export const screeningAPI = {
     }),
 
   listScreeningsForJob: (jobId) =>
-    api.get(`/screen/job/${jobId}/screenings`)
+    api.get(`/screen/job/${jobId}/screenings`),
+
+  sendApprovalEmail: (screeningId) =>
+    api.post(`/screen/${screeningId}/send-email`)
 }
 
 export default api

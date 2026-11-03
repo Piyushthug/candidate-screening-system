@@ -3,12 +3,14 @@ import { screeningAPI } from './services/api'
 import JobSelector from './components/JobSelector'
 import CandidateList from './components/CandidateList'
 import ScreeningForm from './components/ScreeningForm'
+import ResultsSummary from './components/ResultsSummary'
 import './App.css'
 
 function App() {
-  const [page, setPage] = useState('jobs') // jobs, candidates, screening
+  const [page, setPage] = useState('jobs') // jobs, candidates, screening, results
   const [jobs, setJobs] = useState([])
   const [candidates, setCandidates] = useState([])
+  const [screenings, setScreenings] = useState([])
   const [selectedJob, setSelectedJob] = useState(null)
   const [selectedCandidates, setSelectedCandidates] = useState([])
   const [loading, setLoading] = useState(false)
@@ -79,6 +81,11 @@ function App() {
     }
   }
 
+  const handleScreeningComplete = (screeningData) => {
+    setScreenings(screeningData)
+    setPage('results')
+  }
+
   return (
     <div className="app">
       <header className="header">
@@ -127,6 +134,15 @@ function App() {
             job={selectedJob}
             candidateIds={selectedCandidates}
             onBack={() => setPage('candidates')}
+            onComplete={handleScreeningComplete}
+          />
+        )}
+
+        {!loading && page === 'results' && selectedJob && (
+          <ResultsSummary
+            job={selectedJob}
+            screenings={screenings}
+            onBack={() => setPage('jobs')}
           />
         )}
       </div>

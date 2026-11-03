@@ -250,3 +250,43 @@ async def list_screenings_for_job(job_id: str, db: Session = Depends(get_db)):
         "total": len(screening_data),
         "screenings": screening_data
     }
+
+
+@router.post("/{screening_id}/send-email")
+async def send_approval_email(screening_id: str, db: Session = Depends(get_db)):
+    """Send approval email to candidate with generated message."""
+
+    screening = db.query(Screening).filter(Screening.id == screening_id).first()
+    if not screening:
+        raise HTTPException(status_code=404, detail="Screening not found")
+
+    if screening.approval_status != "approved":
+        raise HTTPException(
+            status_code=400,
+            detail="Email can only be sent for approved screenings"
+        )
+
+    candidate = db.query(Candidate).filter(Candidate.id == screening.candidate_id).first()
+    job = db.query(Job).filter(Job.id == screening.job_id).first()
+
+    if not candidate or not job:
+        raise HTTPException(status_code=404, detail="Candidate or job not found")
+
+    if not screening.generated_message:
+        raise HTTPException(status_code=400, detail="No message generated for this screening")
+
+    # In a real implementation, this would send an actual email
+    # For now, we'll just log it and return success
+    print(f"\n{'='*60}")
+    print(f"EMAIL TO: {candidate.email}")
+    print(f"SUBJECT: {job.title} - We're Interested!")
+    print(f"BODY:\n{screening.generated_message}")
+    print(f"{'='*60}\n")
+
+    return {
+        "screening_id": screening_id,
+        "status": "sent",
+        "message": f"Approval email sent to {candidate.email}",
+        "candidate_name": candidate.name,
+        "candidate_email": candidate.email
+    }

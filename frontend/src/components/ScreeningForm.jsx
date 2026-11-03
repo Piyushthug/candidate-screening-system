@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { screeningAPI } from '../services/api'
 import './ScreeningForm.css'
 
-export default function ScreeningForm({ job, candidateIds, onBack }) {
+export default function ScreeningForm({ job, candidateIds, onBack, onComplete }) {
   const [screenings, setScreenings] = useState([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [loading, setLoading] = useState(true)
@@ -131,8 +131,12 @@ export default function ScreeningForm({ job, candidateIds, onBack }) {
     if (currentIndex < screenings.length - 1) {
       setCurrentIndex(currentIndex + 1)
     } else {
-      // No more screenings, show completion
-      setError('All candidates have been reviewed! Click Exit to go back.')
+      // All screening complete - show results
+      if (onComplete) {
+        onComplete(screenings)
+      } else {
+        setError('All candidates have been reviewed! Click Exit to go back.')
+      }
     }
   }
 
