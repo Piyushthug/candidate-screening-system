@@ -9,8 +9,8 @@
 
 .table-header {
   display: grid;
-  grid-template-columns: 40px 200px 200px 150px;
-  gap: 10px;
+  grid-template-columns: 40px 180px 200px 120px;
+  gap: 15px;
   background: #f7fafc;
   padding: 12px;
   border-radius: 4px;
@@ -20,8 +20,8 @@
 
 .table-row {
   display: grid;
-  grid-template-columns: 40px 200px 200px 150px;
-  gap: 10px;
+  grid-template-columns: 40px 180px 200px 120px;
+  gap: 15px;
   padding: 12px;
   border-bottom: 1px solid #e2e8f0;
   align-items: center;
@@ -46,9 +46,19 @@
   font-size: 14px;
 }
 
+.table-row .skills {
+  color: #667eea;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .table-row .experience {
   color: #718096;
   font-size: 14px;
+  font-weight: 500;
 }
 
 button:disabled {

@@ -3,60 +3,80 @@
     "id": "cand_001",
     "name": "Alice Johnson",
     "email": "alice@example.com",
-    "resume_text": "Senior Python Engineer with 7 years of experience. Expertise in FastAPI, PostgreSQL, AWS, and Docker. Led backend team at TechCorp. Published 3 papers on scalable microservices. Mentored 5 junior developers."
+    "resume_text": "Senior Python Engineer with 7 years of experience. Expertise in FastAPI, PostgreSQL, AWS, and Docker. Led backend team at TechCorp. Published 3 papers on scalable microservices. Mentored 5 junior developers.",
+    "parsed_skills": ["Python", "FastAPI", "PostgreSQL", "AWS", "Docker"],
+    "experience_years": 7
   },
   {
     "id": "cand_002",
     "name": "Bob Smith",
     "email": "bob@example.com",
-    "resume_text": "Full Stack Developer with 4 years of experience. Proficient in JavaScript, React, Node.js, and HTML/CSS. Built multiple REST APIs. Familiar with agile development practices. Currently at WebDev Inc."
+    "resume_text": "Full Stack Developer with 4 years of experience. Proficient in JavaScript, React, Node.js, and HTML/CSS. Built multiple REST APIs. Familiar with agile development practices. Currently at WebDev Inc.",
+    "parsed_skills": ["JavaScript", "React", "Node.js", "HTML/CSS"],
+    "experience_years": 4
   },
   {
     "id": "cand_003",
     "name": "Carol Davis",
     "email": "carol@example.com",
-    "resume_text": "Recent graduate with 1 year experience as junior developer. Strong foundation in JavaScript, HTML, CSS. Completed bootcamp with focus on React. Contributed to open source projects. Eager to learn and grow."
+    "resume_text": "Recent graduate with 1 year experience as junior developer. Strong foundation in JavaScript, HTML, CSS. Completed bootcamp with focus on React. Contributed to open source projects. Eager to learn and grow.",
+    "parsed_skills": ["JavaScript", "React", "HTML", "CSS"],
+    "experience_years": 1
   },
   {
     "id": "cand_004",
     "name": "David Lee",
     "email": "david@example.com",
-    "resume_text": "ML Engineer with 5 years of experience. Expert in TensorFlow, PyTorch, and OpenCV. Published papers on computer vision. Worked on image recognition projects. Strong Python skills and Linux expertise."
+    "resume_text": "ML Engineer with 5 years of experience. Expert in TensorFlow, PyTorch, and OpenCV. Published papers on computer vision. Worked on image recognition projects. Strong Python skills and Linux expertise.",
+    "parsed_skills": ["Python", "TensorFlow", "PyTorch", "OpenCV"],
+    "experience_years": 5
   },
   {
     "id": "cand_005",
     "name": "Emma Wilson",
     "email": "emma@example.com",
-    "resume_text": "DevOps Engineer with 4 years of experience. Skilled in Kubernetes, Docker, AWS, and CI/CD pipelines. Managed infrastructure at CloudCorp. Experience with Terraform and Infrastructure as Code. Strong Python scripting skills."
+    "resume_text": "DevOps Engineer with 4 years of experience. Skilled in Kubernetes, Docker, AWS, and CI/CD pipelines. Managed infrastructure at CloudCorp. Experience with Terraform and Infrastructure as Code. Strong Python scripting skills.",
+    "parsed_skills": ["Kubernetes", "Docker", "AWS", "CI/CD", "Terraform"],
+    "experience_years": 4
   },
   {
     "id": "cand_006",
     "name": "Frank Brown",
     "email": "frank@example.com",
-    "resume_text": "Full Stack Engineer with 8 years of experience. Proficient in Python, JavaScript, React, Node.js, PostgreSQL, and AWS. Led teams of 5+. Interested in backend role. Some experience with FastAPI."
+    "resume_text": "Full Stack Engineer with 8 years of experience. Proficient in Python, JavaScript, React, Node.js, PostgreSQL, and AWS. Led teams of 5+. Interested in backend role. Some experience with FastAPI.",
+    "parsed_skills": ["Python", "JavaScript", "React", "FastAPI", "PostgreSQL"],
+    "experience_years": 8
   },
   {
     "id": "cand_007",
     "name": "Grace Martin",
     "email": "grace@example.com",
-    "resume_text": "Frontend specialist with 3 years of experience. Expert in React, JavaScript, HTML/CSS. CSS-in-JS expert. Good understanding of REST APIs. Contributed to popular React libraries. Interested in full stack work."
+    "resume_text": "Frontend specialist with 3 years of experience. Expert in React, JavaScript, HTML/CSS. CSS-in-JS expert. Good understanding of REST APIs. Contributed to popular React libraries. Interested in full stack work.",
+    "parsed_skills": ["React", "JavaScript", "CSS", "HTML"],
+    "experience_years": 3
   },
   {
     "id": "cand_008",
     "name": "Henry Taylor",
     "email": "henry@example.com",
-    "resume_text": "Systems Administrator transitioning to DevOps. 2 years of Linux and Docker experience. Self-taught in Kubernetes and AWS. Contributing to open source DevOps tools. Eager to formalize skills."
+    "resume_text": "Systems Administrator transitioning to DevOps. 2 years of Linux and Docker experience. Self-taught in Kubernetes and AWS. Contributing to open source DevOps tools. Eager to formalize skills.",
+    "parsed_skills": ["Linux", "Docker", "Kubernetes", "AWS"],
+    "experience_years": 2
   },
   {
     "id": "cand_009",
     "name": "Iris Chen",
     "email": "iris@example.com",
-    "resume_text": "Data Scientist with Python background. 3 years of experience. Familiar with machine learning basics. Some experience with TensorFlow. Strong SQL and data analysis skills. Interested in computer vision."
+    "resume_text": "Data Scientist with Python background. 3 years of experience. Familiar with machine learning basics. Some experience with TensorFlow. Strong SQL and data analysis skills. Interested in computer vision.",
+    "parsed_skills": ["Python", "SQL", "TensorFlow", "Data Analysis"],
+    "experience_years": 3
   },
   {
     "id": "cand_010",
     "name": "Jack Rodriguez",
     "email": "jack@example.com",
-    "resume_text": "Senior Backend Engineer with 6 years of Python experience. Expert in Django and some FastAPI experience. PostgreSQL and Redis expert. AWS certified. Interested in microservices architecture. Great mentor."
+    "resume_text": "Senior Backend Engineer with 6 years of Python experience. Expert in Django and some FastAPI experience. PostgreSQL and Redis expert. AWS certified. Interested in microservices architecture. Great mentor.",
+    "parsed_skills": ["Python", "Django", "FastAPI", "PostgreSQL", "Redis"],
+    "experience_years": 6
   }
 ]

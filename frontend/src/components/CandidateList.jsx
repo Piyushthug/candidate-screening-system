@@ -40,24 +40,37 @@ export default function CandidateList({
                   }}
                 />
                 <span>Name</span>
-                <span>Email</span>
+                <span>Skills</span>
                 <span>Experience</span>
               </div>
 
-              {candidates.map(candidate => (
-                <div key={candidate.id} className="table-row">
-                  <input
-                    type="checkbox"
-                    checked={selectedCandidates.includes(candidate.id)}
-                    onChange={() => onToggle(candidate.id)}
-                  />
-                  <span className="name">{candidate.name}</span>
-                  <span className="email">{candidate.email}</span>
-                  <span className="experience">
-                    {candidate.experience_years || '-'} years
-                  </span>
-                </div>
-              ))}
+              {candidates.map(candidate => {
+                const skills = candidate.parsed_skills
+                  ? (Array.isArray(candidate.parsed_skills)
+                      ? candidate.parsed_skills
+                      : candidate.parsed_skills.split(','))
+                  : []
+                const primarySkills = skills.slice(0, 2).join(', ')
+
+                return (
+                  <div key={candidate.id} className="table-row">
+                    <input
+                      type="checkbox"
+                      checked={selectedCandidates.includes(candidate.id)}
+                      onChange={() => onToggle(candidate.id)}
+                    />
+                    <span className="name">{candidate.name}</span>
+                    <span className="skills">
+                      {primarySkills || 'Not specified'}
+                    </span>
+                    <span className="experience">
+                      {candidate.experience_years !== null && candidate.experience_years !== undefined
+                        ? `${candidate.experience_years} yrs`
+                        : 'N/A'}
+                    </span>
+                  </div>
+                )
+              })}
             </div>
 
             <div className="flex-between mt-20">
