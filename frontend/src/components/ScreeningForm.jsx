@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { screeningAPI } from '../services/api'
 import './ScreeningForm.css'
 
-export default function ScreeningForm({ job, candidateIds, onBack, onComplete }) {
+export default function ScreeningForm({ job, candidateIds, screeningIds, onBack, onComplete }) {
   const [screenings, setScreenings] = useState([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [loading, setLoading] = useState(true)
@@ -16,14 +16,33 @@ export default function ScreeningForm({ job, candidateIds, onBack, onComplete })
   const loadScreenings = async () => {
     try {
       setLoading(true)
-      // Get all screenings for this job
-      const listRes = await screeningAPI.listScreeningsForJob(job.id)
-      const allScreenings = listRes.data.screenings || []
+      let relevantScreenings = []
 
-      // Filter to just the screenings for selected candidates
-      const relevantScreenings = allScreenings.filter(s =>
-        candidateIds.includes(s.candidate_id)
-      )
+      // Use screening IDs from batch if available
+      if (screeningIds && screeningIds.length > 0) {
+        // Load only the screenings from this batch
+        for (const screeningId of screeningIds) {
+          try {
+            const listRes = await screeningAPI.listScreeningsForJob(job.id)
+            const allScreenings = listRes.data.screenings || []
+            const screening = allScreenings.find(s => s.id === screeningId)
+            if (screening) {
+              relevantScreenings.push(screening)
+            }
+          } catch (e) {
+            console.warn(`Could not load screening ${screeningId}:`, e)
+          }
+        }
+      } else {
+        // Fallback: Get all screenings for this job and filter
+        const listRes = await screeningAPI.listScreeningsForJob(job.id)
+        const allScreenings = listRes.data.screenings || []
+
+        // Filter to just the screenings for selected candidates
+        relevantScreenings = allScreenings.filter(s =>
+          candidateIds.includes(s.candidate_id)
+        )
+      }
 
       if (relevantScreenings.length === 0) {
         throw new Error('No screenings found for selected candidates')

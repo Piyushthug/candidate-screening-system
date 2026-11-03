@@ -30,31 +30,38 @@ async def start_screening_batch(
     if job.archived:
         raise HTTPException(status_code=400, detail="Job is archived")
 
-    # If no candidates specified, get all candidates
-    if not candidate_ids:
-        candidates = db.query(Candidate).all()
-        candidate_ids = [c.id for c in candidates]
+    if not candidate_ids or len(candidate_ids) == 0:
+        raise HTTPException(status_code=400, detail="At least one candidate must be selected")
 
     # Create screening records for each candidate
-    screenings = []
+    screening_ids = []
     for candidate_id in candidate_ids:
         candidate = db.query(Candidate).filter(Candidate.id == candidate_id).first()
         if not candidate:
             continue
 
-        screening_id = f"screening_{uuid.uuid4().hex[:8]}"
-        screening = ScreeningService.create_screening(
-            screening_id,
-            job_id,
-            candidate_id,
-            db
-        )
-        screenings.append(screening)
+        # Check if screening already exists for this candidate and job
+        existing = db.query(Screening).filter(
+            Screening.job_id == job_id,
+            Screening.candidate_id == candidate_id
+        ).first()
+
+        if existing:
+            screening_ids.append(existing.id)
+        else:
+            screening_id = f"screening_{uuid.uuid4().hex[:8]}"
+            screening = ScreeningService.create_screening(
+                screening_id,
+                job_id,
+                candidate_id,
+                db
+            )
+            screening_ids.append(screening.id)
 
     return {
         "job_id": job_id,
-        "screenings_created": len(screenings),
-        "screening_ids": [s.id for s in screenings]
+        "screenings_created": len(screening_ids),
+        "screening_ids": screening_ids
     }
 
 

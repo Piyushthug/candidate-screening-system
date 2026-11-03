@@ -13,6 +13,7 @@ function App() {
   const [screenings, setScreenings] = useState([])
   const [selectedJob, setSelectedJob] = useState(null)
   const [selectedCandidates, setSelectedCandidates] = useState([])
+  const [batchScreeningIds, setBatchScreeningIds] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
@@ -70,11 +71,12 @@ function App() {
 
     try {
       setLoading(true)
-      await screeningAPI.createBatch(selectedJob.id, selectedCandidates)
+      const { data } = await screeningAPI.createBatch(selectedJob.id, selectedCandidates)
+      setBatchScreeningIds(data.screening_ids)
       setPage('screening')
       setError(null)
     } catch (err) {
-      setError('Failed to start screening')
+      setError('Failed to start screening: ' + (err.message || 'Unknown error'))
       console.error(err)
     } finally {
       setLoading(false)
@@ -133,6 +135,7 @@ function App() {
           <ScreeningForm
             job={selectedJob}
             candidateIds={selectedCandidates}
+            screeningIds={batchScreeningIds}
             onBack={() => setPage('candidates')}
             onComplete={handleScreeningComplete}
           />
